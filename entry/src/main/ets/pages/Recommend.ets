@@ -1,9 +1,11 @@
 import { AppStorageV2 } from "@kit.ArkUI";
+import { SongItemType } from "../modules/music";
 import { playerManager } from "../utils/AvPlayerManager";
 
 interface DAILY_RECOMMEND_TYPE {
   name: string,
-  id: string
+  id: string,
+  duration: number
 }
 
 @ComponentV2
@@ -11,10 +13,28 @@ export struct Recommend {
 
   pathStack: NavPathStack = AppStorageV2.connect(NavPathStack, 'navStack', () => new NavPathStack())!;
 
-  @Local dailyRecommend:DAILY_RECOMMEND_TYPE[] = [
-    {id: '1',name: '111那我日恁让我呢绒玩弄人那请问呢哦去呢哦去玩弄去'},
-    {id: '2',name: '22'},
-    {id: '3',name: '3333'},
+  @Local dailyRecommend:SongItemType[] = [
+    {
+      img: 'http://jyjy-teach-oss.oss-cn-beijing.aliyuncs.com/HeimaCloudMusic/0.jpg',
+      name: '前进世界的尽头',
+      author: 'WANDS',
+      url: 'http://jyjy-teach-oss.oss-cn-beijing.aliyuncs.com/HeimaCloudMusic/0.m4a',
+      id: '0000'
+    },
+    {
+      img: 'http://jyjy-teach-oss.oss-cn-beijing.aliyuncs.com/HeimaCloudMusic/1.jpg',
+      name: '画',
+      author: '赵雷',
+      url: 'http://jyjy-teach-oss.oss-cn-beijing.aliyuncs.com/HeimaCloudMusic/1.mp3',
+      id: '0001'
+    },
+    {
+      img: 'http://jyjy-teach-oss.oss-cn-beijing.aliyuncs.com/HeimaCloudMusic/2.jpg',
+      name: 'Sweet Dreams',
+      author: 'TPaul Sax / Eurythmics',
+      url: 'http://jyjy-teach-oss.oss-cn-beijing.aliyuncs.com/HeimaCloudMusic/2.mp3',
+      id: '0002'
+    }
   ]
 
   @Local swiperList: ResourceStr[] = [
@@ -69,7 +89,7 @@ export struct Recommend {
       this.titleBuilder('每日推荐')
 
       List() {
-        ForEach(this.dailyRecommend, (item: DAILY_RECOMMEND_TYPE) => {
+        ForEach(this.dailyRecommend, (item: DAILY_RECOMMEND_TYPE, index: number) => {
           ListItem() {
             Column() {
               Text(item.name)
@@ -88,7 +108,13 @@ export struct Recommend {
             .clip(true)
           }.onClick(() => {
             this.pathStack.pushPathByName('Play', null, false)
-            // playerManager.singPlay({})
+            playerManager.singPlay({
+              id: item.id,
+              name: item.name,
+              author: `hang-${index}`,
+              url: '',
+              img: ''
+            })
           })
         })
       }
