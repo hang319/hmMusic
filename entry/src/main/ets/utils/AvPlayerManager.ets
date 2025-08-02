@@ -1,6 +1,7 @@
 import { media } from '@kit.MediaKit'
 import { GlobalMusic, SongItemType } from '../modules/music';
 import { AppStorageV2 } from '@kit.ArkUI';
+import { sessionManager } from './AvSessionManager';
 
 class AvPlayerManager {
   // 属性+方法
@@ -37,6 +38,7 @@ class AvPlayerManager {
 
   // 播放歌曲，设置播放资源（完整版本）
   singPlay(song: SongItemType) {
+    sessionManager.startBackgroundTask()
     // 判断是否在数组里
    const flag = this.currentSong.playList.some(item => item.id == song.id);
    if(flag) {

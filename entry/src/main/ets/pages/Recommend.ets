@@ -1,12 +1,15 @@
 import { AppStorageV2 } from "@kit.ArkUI";
 import { SongItemType } from "../modules/music";
 import { playerManager } from "../utils/AvPlayerManager";
+import { MusicItem } from "../components/MusicItem";
 
 interface DAILY_RECOMMEND_TYPE {
   name: string,
   id: string,
   duration: number
 }
+
+
 
 @ComponentV2
 export struct Recommend {
@@ -92,30 +95,25 @@ export struct Recommend {
         ForEach(this.dailyRecommend, (item: DAILY_RECOMMEND_TYPE, index: number) => {
           ListItem() {
             Column() {
-              Text(item.name)
-                .fontColor('#fff')
-                .fontSize(20)
-                .maxLines(2)
-                .textOverflow({ overflow: TextOverflow.Ellipsis })
-              Image($r('app.media.tab2'))
-                .width(20)
+              // 使用@Prop传递数据给子组件
+              MusicItem({
+                songName: item.name,
+                songAuthor: `作者-${index}`,
+                isPlaying: index === 0,  // 第一首歌显示为播放状态
+              })
             }
-            .width('40%')
-            .height(200)
-            .margin({right: 20})
-            .backgroundColor(Color.Pink)
-            .borderRadius(10)
-            .clip(true)
-          }.onClick(() => {
-            this.pathStack.pushPathByName('Play', null, false)
-            playerManager.singPlay({
-              id: item.id,
-              name: item.name,
-              author: `hang-${index}`,
-              url: '',
-              img: ''
+            .width('100%')
+            .onClick(() => {
+              this.pathStack.pushPathByName('Play', null, false)
+              playerManager.singPlay({
+                id: item.id,
+                name: item.name,
+                author: `hang-${index}`,
+                url: '',
+                img: ''
+              })
             })
-          })
+          }
         })
       }
       .listDirection(Axis.Horizontal)

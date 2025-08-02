@@ -2,6 +2,7 @@ import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.Ab
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { playerManager } from '../utils/AvPlayerManager';
+import { sessionManager } from '../utils/AvSessionManager';
 
 const DOMAIN = 0x0000;
 
@@ -20,6 +21,7 @@ export default class EntryAbility extends UIAbility {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
     playerManager.init();
+    sessionManager.init(this.context);
 
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
